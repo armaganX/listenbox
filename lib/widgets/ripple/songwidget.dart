@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 
@@ -12,12 +13,21 @@ class SongWidget extends StatefulWidget {
 class _SongWidgetState extends State<SongWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(widget.music.title),
-        ],
-      ),
+    return Column(
+      children: [
+        Text(
+          widget.music.title,
+          style: const TextStyle(fontSize: 20.0, color: Colors.black),
+        ),
+        Text(
+          widget.music.album.name,
+          style: const TextStyle(fontSize: 20.0, color: Colors.black),
+        ),
+        Text(
+          widget.music.artists.first.name,
+          style: const TextStyle(fontSize: 20.0, color: Colors.black),
+        ),
+      ],
     );
   }
 }
