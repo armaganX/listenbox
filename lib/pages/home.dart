@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isLoading = false;
+  bool _isListening = false;
   ACRCloudResponseMusicItem? music;
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             RipplesAnimation(
               color: Colors.black,
-              size: _isLoading ? 160.0 : 40,
+              size: _isListening ? 160.0 : 40,
               onPressed: () {
                 setState(() {
                   music = null;
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () async {
                 setState(() {
-                  _isLoading = true;
+                  _isListening = true;
                   music = null;
                 });
 
@@ -96,15 +96,18 @@ class _HomePageState extends State<HomePage> {
                 // );
 
                 final result = await session.result;
-                setState(() {
-                  _isLoading = false;
-                });
+                // setState(() {
+                //   _isLoading = false;
+                // });
                 // Navigator.pop(context);
 
                 if (result == null) {
                   // Cancelled.
                   return;
                 } else if (result.metadata == null) {
+                  setState(() {
+                    _isListening = false;
+                  });
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('No result.'),
                   ));
@@ -112,9 +115,15 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 setState(() {
+                  _isListening = false;
                   music = result.metadata!.music.first;
                 });
               },
+            ),
+            const Align(
+              alignment: Alignment.topCenter,
+              child: Text('Listening...',
+                  style: TextStyle(color: Colors.white, fontSize: 25)),
             ),
             Align(
               alignment: Alignment.bottomCenter,
