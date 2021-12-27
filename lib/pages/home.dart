@@ -120,11 +120,16 @@ class _HomePageState extends State<HomePage> {
                 });
               },
             ),
-            const Align(
-              alignment: Alignment.topCenter,
-              child: Text('Listening...',
-                  style: TextStyle(color: Colors.white, fontSize: 25)),
-            ),
+            _isListening
+                ? const Padding(
+                    padding: EdgeInsets.only(top: 100.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Text('Listening...',
+                          style: TextStyle(color: Colors.white, fontSize: 25)),
+                    ),
+                  )
+                : Container(),
             Align(
               alignment: Alignment.bottomCenter,
               child: music != null ? SongWidget(music: music!) : Container(),
