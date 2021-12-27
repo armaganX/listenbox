@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                   alignment: Alignment.center,
                   child: RipplesAnimation(
                     color: Colors.black,
-                    size: _isListening ? 160.0 : 40,
+                    size: _isListening ? 160.0 : 0,
                     onPressed: () {
                       setState(() {
                         music = null;
@@ -68,13 +68,11 @@ class _HomePageState extends State<HomePage> {
                     size: 50,
                   ),
                   style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    minimumSize: const Size(50, 30),
+                    elevation: 10,
+                    minimumSize: const Size(50, 50),
                     tapTargetSize: MaterialTapTargetSize.padded,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    padding: const EdgeInsets.all(0),
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(15),
                     primary: Colors.black,
                     // onPrimary: AppColors.mainColor, // <-- Splash color
                   ),
@@ -106,13 +104,15 @@ class _HomePageState extends State<HomePage> {
                     // );
 
                     final result = await session.result;
-                    // setState(() {
-                    //   _isLoading = false;
-                    // });
-                    // Navigator.pop(context);
 
                     if (result == null) {
                       // Cancelled.
+                      if (_isListening) {
+                        session.cancel;
+                        setState(() {
+                          _isListening = false;
+                        });
+                      }
                       return;
                     } else if (result.metadata == null) {
                       setState(() {

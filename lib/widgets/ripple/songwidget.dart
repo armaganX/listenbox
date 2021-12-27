@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 
 class SongWidget extends StatefulWidget {
@@ -17,7 +16,8 @@ class _SongWidgetState extends State<SongWidget> {
       children: [
         Text(
           widget.music.title,
-          style: const TextStyle(fontSize: 20.0, color: Colors.black),
+          style: const TextStyle(
+              fontSize: 25.0, color: Colors.black, fontWeight: FontWeight.bold),
         ),
         Text(
           widget.music.album.name,
