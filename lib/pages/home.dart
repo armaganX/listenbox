@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
 class AnimatedBubble extends AnimatedWidget {
   // A 4-Dimensional matrix to transform a bubble
-  var transform = Matrix4.identity();
+  final transform = Matrix4.identity();
 
   // Start size of the bubble
   double startSize;
@@ -297,8 +297,11 @@ class AnimatedBubble extends AnimatedWidget {
               const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
           height:
               _sizeTween.evaluate(animation), //_sizeTween.evaluate(animation),
-          width:
-              _sizeTween.evaluate(animation), //_sizeTween.evaluate(animation),
+          width: _sizeTween.evaluate(animation),
+          // child: const Icon(
+          //   Icons.audiotrack_rounded,
+          //   size: 15,
+          // ), //_sizeTween.evaluate(animation),
         ),
       ),
     );
