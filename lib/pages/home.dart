@@ -18,6 +18,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController bubbleController;
   // list of bubble widgets shown on screen
   final List<Widget> bubbleWidgets = [];
+  late double _scale;
+  late AnimationController _buttonController;
 
   // flag to check if the bubbles are already present or not.
   bool areBubblesAdded = false;
@@ -27,6 +29,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Stream<double> volume;
   @override
   void initState() {
+    _buttonController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 500,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+        setState(() {});
+      });
     bubbleController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -57,6 +69,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _buttonController.dispose();
     bubbleController.dispose();
     super.dispose();
   }
@@ -115,6 +128,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             // onPrimary: AppColors.mainColor, // <-- Splash color
                             ),
                         onPressed: () async {
+                          _buttonController.forward();
+                          Future.delayed(const Duration(milliseconds: 750),
+                              () => {_buttonController.reverse()});
+
                           setState(() {
                             _isListening = true;
                             music = null;
