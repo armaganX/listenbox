@@ -14,6 +14,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _isListening = false;
   ACRCloudResponseMusicItem? music;
+  late Object _session;
+  late Stream<double> volume;
   @override
   void initState() {
     ACRCloud.setUp(ACRCloudConfig(
@@ -38,14 +40,13 @@ class _HomePageState extends State<HomePage> {
           width: MediaQuery.of(context).size.width,
           child: Stack(
             alignment: Alignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.center,
                   child: RipplesAnimation(
                     color: Colors.black,
-                    size: _isListening ? 160.0 : 0,
+                    size: _isListening ? 160 : 0,
                     onPressed: () {
                       setState(() {
                         music = null;
@@ -59,78 +60,99 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Positioned.fill(
-                  child: Align(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  child: const Icon(
-                    Icons.headphones,
-                    color: Colors.white,
-                    size: 50,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 10,
-                    minimumSize: const Size(50, 50),
-                    tapTargetSize: MaterialTapTargetSize.padded,
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(15),
-                    primary: Colors.black,
-                    // onPrimary: AppColors.mainColor, // <-- Splash color
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      _isListening = true;
-                      music = null;
-                    });
+                child: Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    child: const Icon(
+                      Icons.headphones,
+                      color: Colors.white,
+                      size: 50,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        elevation: 10,
+                        minimumSize: const Size(50, 50),
+                        tapTargetSize: MaterialTapTargetSize.padded,
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(15),
+                        primary: Colors.black,
+                        alignment: Alignment.center
+                        // onPrimary: AppColors.mainColor, // <-- Splash color
+                        ),
+                    onPressed: () async {
+                      setState(() {
+                        _isListening = true;
+                        music = null;
+                      });
+                      ACRCloudSession session = ACRCloud.startSession();
+                      _session = session;
+                      // showDialog(
+                      //   context: context,
+                      //   barrierDismissible: false,
+                      //   builder: (context) => AlertDialog(
+                      //     title: const Text('Listening...'),
+                      //     content: StreamBuilder(
+                      //       stream: session.volumeStream,
+                      //       initialData: 0,
+                      //       builder: (_, snapshot) => Text(snapshot.data.toString()),
+                      //     ),
+                      //     actions: [
+                      //       TextButton(
+                      //         child: const Text('Cancel'),
+                      //         onPressed: session.cancel,
+                      //       )
+                      //     ],
+                      //   ),
+                      // );
+                      volume = session.volumeStream;
 
-                    final session = ACRCloud.startSession();
+                      final result = await session.result;
 
-                    // showDialog(
-                    //   context: context,
-                    //   barrierDismissible: false,
-                    //   builder: (context) => AlertDialog(
-                    //     title: const Text('Listening...'),
-                    //     content: StreamBuilder(
-                    //       stream: session.volumeStream,
-                    //       initialData: 0,
-                    //       builder: (_, snapshot) => Text(snapshot.data.toString()),
-                    //     ),
-                    //     actions: [
-                    //       TextButton(
-                    //         child: const Text('Cancel'),
-                    //         onPressed: session.cancel,
-                    //       )
-                    //     ],
-                    //   ),
-                    // );
-
-                    final result = await session.result;
-
-                    if (result == null) {
-                      // Cancelled.
-                      if (_isListening) {
-                        session.cancel;
+                      if (result == null) {
+                        // Cancelled.
+                        if (_isListening) {
+                          session.cancel;
+                          setState(() {
+                            _isListening = false;
+                          });
+                        }
+                        return;
+                      } else if (result.metadata == null) {
                         setState(() {
                           _isListening = false;
                         });
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            'We cant find any result.',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ));
+                        return;
                       }
-                      return;
-                    } else if (result.metadata == null) {
+
                       setState(() {
                         _isListening = false;
+                        music = result.metadata!.music.first;
                       });
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('No result.'),
-                      ));
-                      return;
-                    }
-
-                    setState(() {
-                      _isListening = false;
-                      music = result.metadata!.music.first;
-                    });
-                  },
+                    },
+                  ),
                 ),
-              )),
+              ),
+              _isListening
+                  ? Positioned(
+                      bottom: MediaQuery.of(context).size.height / 8,
+                      child: const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(
+                          'Tap to cancel',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  : Container(),
               Positioned(
                 bottom: MediaQuery.of(context).size.height / 8,
                 child: Align(
@@ -141,7 +163,7 @@ class _HomePageState extends State<HomePage> {
               ),
               _isListening
                   ? Positioned(
-                      top: MediaQuery.of(context).size.height / 5,
+                      top: MediaQuery.of(context).size.height / 6,
                       child: const Align(
                         alignment: Alignment.center,
                         child: Text('Listening...',
