@@ -39,15 +39,26 @@ class MyApp extends StatelessWidget {
           child: ConnectionStatusBar(
             height: 45,
             title: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: const [
+                SizedBox(
+                  width: 15,
+                ),
                 Icon(
                   Icons.wifi_off_rounded,
                   color: Colors.white,
                   size: 25,
                 ),
+                SizedBox(
+                  width: 15,
+                ),
                 Text(
                   'Please check your internet connection',
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: Colors.white,
+                      fontSize: 14),
                 ),
               ],
             ),
