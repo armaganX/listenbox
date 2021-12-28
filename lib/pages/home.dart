@@ -19,27 +19,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // list of bubble widgets shown on screen
   final List<Widget> bubbleWidgets = [];
   late double _scale;
-  late AnimationController _buttonController;
+  // late AnimationController _buttonController;
   double _micVolume = 0.0;
 
   // flag to check if the bubbles are already present or not.
   bool areBubblesAdded = false;
   bool _isListening = false;
+  bool _isCanceled = false;
   ACRCloudResponseMusicItem? music;
-  late Object _session;
+  ACRCloudSession? _session;
   late Stream<double> volume;
   @override
   void initState() {
-    _buttonController = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        milliseconds: 500,
-      ),
-      lowerBound: 0.0,
-      upperBound: 0.1,
-    )..addListener(() {
-        setState(() {});
-      });
+    // _buttonController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(
+    //     milliseconds: 500,
+    //   ),
+    //   lowerBound: 0.0,
+    //   upperBound: 0.1,
+    // )..addListener(() {
+    //     setState(() {});
+    //   });
     bubbleController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -70,7 +71,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _buttonController.dispose();
+    // _buttonController.dispose();
     bubbleController.dispose();
     super.dispose();
   }
@@ -129,73 +130,64 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             // onPrimary: AppColors.mainColor, // <-- Splash color
                             ),
                         onPressed: () async {
-                          _buttonController.forward();
-                          Future.delayed(const Duration(milliseconds: 750),
-                              () => {_buttonController.reverse()});
+                          try {
+                            ACRCloudSession session = ACRCloud.startSession();
+                            // _buttonController.forward();
+                            // Future.delayed(const Duration(milliseconds: 750),
+                            //     () => {_buttonController.reverse()});
 
-                          setState(() {
-                            _isListening = true;
-                            music = null;
-                          });
-                          ACRCloudSession session = ACRCloud.startSession();
-                          setState(() {
-                            _session = session;
-                            session.volumeStream.listen((event) {
-                              setState(() {
-                                _micVolume = event;
+                            setState(() {
+                              _isListening = true;
+                              music = null;
+                              session.volumeStream.listen((event) {
+                                setState(() {
+                                  _micVolume = event;
+                                });
                               });
                             });
-                          });
 
-                          // showDialog(
-                          //   context: context,
-                          //   barrierDismissible: false,
-                          //   builder: (context) => AlertDialog(
-                          //     title: const Text('Listening...'),
-                          //     content: StreamBuilder(
-                          //       stream: session.volumeStream,
-                          //       initialData: 0,
-                          //       builder: (_, snapshot) => Text(snapshot.data.toString()),
-                          //     ),
-                          //     actions: [
-                          //       TextButton(
-                          //         child: const Text('Cancel'),
-                          //         onPressed: session.cancel,
-                          //       )
-                          //     ],
-                          //   ),
-                          // );
-                          volume = session.volumeStream;
+                            final result = await session.result;
 
-                          final result = await session.result;
+                            if (result == null) {
+                              // Cancelled.
+                              if (_isListening) {
+                                Future.delayed(
+                                    const Duration(milliseconds: 750),
+                                    () => {session.cancel()});
 
-                          if (result == null) {
-                            // Cancelled.
-                            if (_isListening) {
-                              session.cancel();
+                                setState(() {
+                                  _isListening = false;
+                                });
+                              }
+                              // return;
+                              // if (_isListening) {
+                              //   session.cancel();
+                              //   setState(() {
+                              //     _isListening = false;
+                              //   });
+                              // }
+                              // return;
+                            } else if (result.metadata == null) {
                               setState(() {
                                 _isListening = false;
                               });
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text(
+                                  'We cant find any result.',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ));
+                              return;
                             }
-                            return;
-                          } else if (result.metadata == null) {
+
                             setState(() {
                               _isListening = false;
+                              music = result?.metadata!.music.first;
                             });
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                'We cant find any result.',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ));
+                          } catch (e) {
                             return;
                           }
-
-                          setState(() {
-                            _isListening = false;
-                            music = result.metadata!.music.first;
-                          });
                         },
                       ),
                     ),
