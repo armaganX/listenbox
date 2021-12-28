@@ -131,49 +131,81 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             ),
                         onPressed: () async {
                           try {
-                            ACRCloudSession session = ACRCloud.startSession();
+                            ACRCloudSession? session;
+                            if (!_isListening) {
+                              session = ACRCloud.startSession();
+                              setState(() {
+                                _isListening = true;
+                                music = null;
+                                session?.volumeStream.listen((event) {
+                                  _micVolume = event;
+                                });
+                              });
+                            } else {
+                              session?.cancel;
+                              session?.dispose;
+                              setState(() {
+                                _isListening = false;
+                              });
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                duration: const Duration(seconds: 1),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                content: const Text(
+                                  'Canceled.',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ));
+                              return;
+                            }
+
                             // _buttonController.forward();
                             // Future.delayed(const Duration(milliseconds: 750),
                             //     () => {_buttonController.reverse()});
 
-                            setState(() {
-                              _isListening = true;
-                              music = null;
-                              session.volumeStream.listen((event) {
-                                setState(() {
-                                  _micVolume = event;
-                                });
-                              });
-                            });
-
                             final result = await session.result;
 
                             if (result == null) {
-                              // Cancelled.
-                              if (_isListening) {
-                                Future.delayed(
-                                    const Duration(milliseconds: 750),
-                                    () => {session.cancel()});
-
-                                setState(() {
-                                  _isListening = false;
-                                });
-                              }
-                              // return;
+                              // // Cancelled.
                               // if (_isListening) {
+                              //   // Future.delayed(
+                              //   //     const Duration(milliseconds: 750),
+                              //   //     () => {session?.cancel()});
+
                               //   session.cancel();
                               //   setState(() {
                               //     _isListening = false;
                               //   });
                               // }
-                              // return;
+                              // // ScaffoldMessenger.of(context)
+                              // //     .showSnackBar(SnackBar(
+                              // //   duration: const Duration(seconds: 1),
+                              // //   behavior: SnackBarBehavior.floating,
+                              // //   backgroundColor: Colors.black,
+                              // //   shape: RoundedRectangleBorder(
+                              // //       borderRadius: BorderRadius.circular(10.0)),
+                              // //   content: const Text(
+                              // //     'Canceled.',
+                              // //     style: TextStyle(fontWeight: FontWeight.bold),
+                              // //   ),
+                              // // ));
+                              return;
+                             
                             } else if (result.metadata == null) {
                               setState(() {
                                 _isListening = false;
                               });
                               ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text(
+                                  .showSnackBar(SnackBar(
+                                duration: const Duration(seconds: 1),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                content: const Text(
                                   'We cant find any result.',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
@@ -183,9 +215,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                             setState(() {
                               _isListening = false;
-                              music = result?.metadata!.music.first;
+                              music = result.metadata!.music.first;
                             });
-                          } catch (e) {
+                          } on Exception catch (e) {
                             return;
                           }
                         },
