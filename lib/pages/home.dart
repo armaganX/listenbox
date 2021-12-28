@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       alignment: Alignment.center,
                       child: RipplesAnimation(
                         color: Colors.black,
-                        size: _isListening ? 70 + (_micVolume * 100) : 0.0,
+                        size: _isListening ? 65 + (_micVolume * 100) : 0.0,
                         onPressed: () {
                           setState(() {
                             music = null;
@@ -120,15 +120,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           size: 50,
                         ),
                         style: ElevatedButton.styleFrom(
-                            elevation: 10,
-                            minimumSize: const Size(50, 50),
-                            tapTargetSize: MaterialTapTargetSize.padded,
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(15),
-                            primary: Colors.black,
-                            alignment: Alignment.center
-                            // onPrimary: AppColors.mainColor, // <-- Splash color
-                            ),
+                          elevation: 10,
+                          minimumSize: const Size(50, 50),
+                          tapTargetSize: MaterialTapTargetSize.padded,
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(15),
+                          primary: Colors.black,
+                          alignment: Alignment.center,
+                          onPrimary: Colors.black, // <-- Splash color
+                        ),
                         onPressed: () async {
                           try {
                             ACRCloudSession? session;
@@ -169,31 +169,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             final result = await session.result;
 
                             if (result == null) {
-                              // // Cancelled.
-                              // if (_isListening) {
-                              //   // Future.delayed(
-                              //   //     const Duration(milliseconds: 750),
-                              //   //     () => {session?.cancel()});
-
-                              //   session.cancel();
-                              //   setState(() {
-                              //     _isListening = false;
-                              //   });
-                              // }
-                              // // ScaffoldMessenger.of(context)
-                              // //     .showSnackBar(SnackBar(
-                              // //   duration: const Duration(seconds: 1),
-                              // //   behavior: SnackBarBehavior.floating,
-                              // //   backgroundColor: Colors.black,
-                              // //   shape: RoundedRectangleBorder(
-                              // //       borderRadius: BorderRadius.circular(10.0)),
-                              // //   content: const Text(
-                              // //     'Canceled.',
-                              // //     style: TextStyle(fontWeight: FontWeight.bold),
-                              // //   ),
-                              // // ));
                               return;
-                             
                             } else if (result.metadata == null) {
                               setState(() {
                                 _isListening = false;
