@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       alignment: Alignment.center,
                       child: RipplesAnimation(
                         color: Colors.black,
-                        size: _isListening ? 80 + (_micVolume * 10) : 0.0,
+                        size: _isListening ? 70 + (_micVolume * 100) : 0.0,
                         onPressed: () {
                           setState(() {
                             music = null;
