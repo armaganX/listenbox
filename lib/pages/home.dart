@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:listenbox/utils/constants.dart';
+import 'package:listenbox/widgets/ripple/connection_status_bar.dart';
 import 'package:listenbox/widgets/ripple/rippleanimation.dart';
 import 'package:listenbox/widgets/ripple/songwidget.dart';
 
@@ -94,10 +95,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 [
                   Positioned.fill(
                     child: Align(
+                      alignment: Alignment.topCenter,
+                      child: ConnectionStatusBar(
+                        title: Row(
+                          children: const [
+                            Icon(
+                              Icons.wifi_off_rounded,
+                              color: Colors.white,
+                              size: 25,
+                            ),
+                            Text(
+                              'Please check your internet connection',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: Align(
                       alignment: Alignment.center,
                       child: RipplesAnimation(
                         color: Colors.black,
-                        size: _isListening ? 65 + (_micVolume * 100) : 0.0,
+                        size: _isListening ? _micVolume : 0.0,
                         onPressed: () {
                           setState(() {
                             music = null;
@@ -138,7 +161,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 _isListening = true;
                                 music = null;
                                 session?.volumeStream.listen((event) {
-                                  _micVolume = event;
+                                  setState(() {
+                                    _micVolume = (100 * event);
+                                  });
                                 });
                               });
                             } else {
@@ -229,7 +254,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           top: MediaQuery.of(context).size.height / 6,
                           child: const Align(
                             alignment: Alignment.center,
-                            child: Text('Listening...',
+                            child: Text('Listening',
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 25,
@@ -242,10 +267,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  getBubbles() {
-    return bubbleWidgets;
   }
 
   void addBubbles({animation, topPos = 0, leftPos = 0, bubbles = 15}) {
