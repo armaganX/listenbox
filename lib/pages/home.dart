@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final List<Widget> bubbleWidgets = [];
   late double _scale;
   late AnimationController _buttonController;
+  double _micVolume = 0.0;
 
   // flag to check if the bubbles are already present or not.
   bool areBubblesAdded = false;
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       alignment: Alignment.center,
                       child: RipplesAnimation(
                         color: Colors.black,
-                        size: _isListening ? 160 : 0,
+                        size: _isListening ? 80 + (_micVolume * 10) : 0.0,
                         onPressed: () {
                           setState(() {
                             music = null;
@@ -137,7 +138,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             music = null;
                           });
                           ACRCloudSession session = ACRCloud.startSession();
-                          _session = session;
+                          setState(() {
+                            _session = session;
+                            session.volumeStream.listen((event) {
+                              setState(() {
+                                _micVolume = event;
+                              });
+                            });
+                          });
+
                           // showDialog(
                           //   context: context,
                           //   barrierDismissible: false,
@@ -163,7 +172,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           if (result == null) {
                             // Cancelled.
                             if (_isListening) {
-                              session.cancel;
+                              session.cancel();
                               setState(() {
                                 _isListening = false;
                               });
