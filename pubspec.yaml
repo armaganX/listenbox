@@ -37,6 +37,7 @@ dependencies:
   # permission_handler: ^6.1.0
   flutter_acrcloud: ^0.1.5
   connectivity_plus: ^2.1.0
+  flutter_offline: ^2.0.0
 
 dev_dependencies:
   flutter_test:

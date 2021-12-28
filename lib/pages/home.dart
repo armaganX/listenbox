@@ -93,28 +93,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             alignment: Alignment.center,
             children: bubbleWidgets +
                 [
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: ConnectionStatusBar(
-                        title: Row(
-                          children: const [
-                            Icon(
-                              Icons.wifi_off_rounded,
-                              color: Colors.white,
-                              size: 25,
-                            ),
-                            Text(
-                              'Please check your internet connection',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            ),
-                          ],
-                        ),
-                        color: Colors.black,
-                      ),
-                    ),
+                  const Align(
+                    alignment: Alignment.topCenter,
+                    child: ConnectionStatusBar(),
                   ),
+                  // Positioned.fill(
+                  //   child: Align(
+                  //     alignment: Alignment.topCenter,
+                  //     child: ConnectionStatusBar(
+                  //       title: Row(
+                  //         children: const [
+                  //           Icon(
+                  //             Icons.wifi_off_rounded,
+                  //             color: Colors.white,
+                  //             size: 25,
+                  //           ),
+                  //           Text(
+                  //             'Please check your internet connection',
+                  //             style:
+                  //                 TextStyle(color: Colors.white, fontSize: 14),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       color: Colors.black,
+                  //     ),
+                  //   ),
+                  // ),
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,

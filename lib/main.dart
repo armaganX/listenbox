@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:listenbox/pages/home.dart';
+import 'package:listenbox/widgets/ripple/connection_status_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +32,29 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: Stack(fit: StackFit.expand, children: [
+        const HomePage(),
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConnectionStatusBar(
+            height: 45,
+            title: Row(
+              children: const [
+                Icon(
+                  Icons.wifi_off_rounded,
+                  color: Colors.white,
+                  size: 25,
+                ),
+                Text(
+                  'Please check your internet connection',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ],
+            ),
+            color: Colors.black,
+          ),
+        )
+      ]),
     );
   }
 }
