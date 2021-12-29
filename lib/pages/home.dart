@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       addBubbles(animation: bubbleAnimation);
     }
     return Scaffold(
-      backgroundColor: Colors.amber[900],
+      backgroundColor: Color(0xffffa33d),
       body: Padding(
         padding: const EdgeInsets.only(top: 0.0, bottom: 0.0),
         child: SizedBox(
@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       borderRadius:
                                           BorderRadius.circular(10.0)),
                                   content: const Text(
-                                    'Canceled.',
+                                    'Cancelled.',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
