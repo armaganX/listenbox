@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
         builder: (context, AsyncSnapshot snapshot) {
           // Show splash screen while waiting for app resources to load:
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const MaterialApp(home: Splash());
+            return const MaterialApp(
+                debugShowCheckedModeBanner: false, home: Splash());
           } else {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
