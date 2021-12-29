@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       borderRadius:
                                           BorderRadius.circular(10.0)),
                                   content: const Text(
-                                    'Cancelled.',
+                                    'Canceled.',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
