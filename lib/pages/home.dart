@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late AnimationController buttonController;
   late Animation<double> bubbleAnimation;
   late AnimationController bubbleController;
   // list of bubble widgets shown on screen
@@ -28,6 +29,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Stream<double> volume;
   @override
   void initState() {
+    buttonController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 7),
+    );
+
     bubbleController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -58,6 +64,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    buttonController.dispose();
     bubbleController.dispose();
     super.dispose();
   }
@@ -103,88 +110,104 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
-                      child: ElevatedButton(
-                        child: const Icon(
-                          Icons.headphones,
-                          color: Colors.white,
-                          size: 50,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          elevation: 10,
-                          minimumSize: const Size(50, 50),
-                          tapTargetSize: MaterialTapTargetSize.padded,
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(15),
-                          primary: Colors.black,
-                          alignment: Alignment.center,
-                          onPrimary: Colors.black, // <-- Splash color
-                        ),
-                        onPressed: () async {
-                          try {
-                            ACRCloudSession? session;
-                            if (!_isListening) {
-                              session = ACRCloud.startSession();
-                              setState(() {
-                                _isListening = true;
-                                music = null;
-                                session?.volumeStream.listen((event) {
-                                  setState(() {
-                                    _micVolume = (100 * event);
+                      child: AnimatedBuilder(
+                        animation: buttonController,
+                        builder: (context, child) {
+                          return Transform.rotate(
+                            angle: buttonController.value * 6.3,
+                            child: child,
+                          );
+                        },
+                        child: ElevatedButton(
+                          child: const Icon(
+                            Icons.headphones,
+                            color: Colors.white,
+                            size: 50,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 10,
+                            minimumSize: const Size(50, 50),
+                            tapTargetSize: MaterialTapTargetSize.padded,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(15),
+                            primary: Colors.black,
+                            alignment: Alignment.center,
+                            onPrimary: Colors.black, // <-- Splash color
+                          ),
+                          onPressed: () async {
+                            try {
+                              ACRCloudSession? session;
+                              if (!_isListening) {
+                                buttonController.repeat();
+                                session = ACRCloud.startSession();
+                                setState(() {
+                                  _isListening = true;
+                                  music = null;
+                                  session?.volumeStream.listen((event) {
+                                    setState(() {
+                                      _micVolume = (100 * event);
+                                    });
                                   });
                                 });
-                              });
-                            } else {
-                              session?.cancel;
-                              session?.dispose;
+                              } else {
+                                session?.cancel;
+                                session?.dispose;
+                                setState(() {
+                                  _isListening = false;
+                                });
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  duration: const Duration(seconds: 1),
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  content: const Text(
+                                    'Canceled.',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ));
+                                buttonController.reset();
+                                return;
+                              }
+
+                              final result = await session.result;
+
+                              if (result == null) {
+                                return;
+                              } else if (result.metadata == null) {
+                                buttonController.reset();
+                                setState(() {
+                                  _isListening = false;
+                                });
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  duration: const Duration(seconds: 1),
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  content: const Text(
+                                    'We cant find any result.',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ));
+                                return;
+                              }
+
                               setState(() {
                                 _isListening = false;
+                                music = result.metadata!.music.first;
                               });
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                duration: const Duration(seconds: 1),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                content: const Text(
-                                  'Canceled.',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ));
+                            } on Exception catch (e) {
                               return;
                             }
-
-                            final result = await session.result;
-
-                            if (result == null) {
-                              return;
-                            } else if (result.metadata == null) {
-                              setState(() {
-                                _isListening = false;
-                              });
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                duration: const Duration(seconds: 1),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                content: const Text(
-                                  'We cant find any result.',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ));
-                              return;
-                            }
-
-                            setState(() {
-                              _isListening = false;
-                              music = result.metadata!.music.first;
-                            });
-                          } on Exception catch (e) {
-                            return;
-                          }
-                        },
+                          },
+                        ),
                       ),
                     ),
                   ),
