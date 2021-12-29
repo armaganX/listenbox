@@ -91,9 +91,34 @@ class Splash extends StatelessWidget {
     // bool lightMode =
     //     MediaQuery.of(context).platformBrightness == Brightness.light;
     return Scaffold(
-      backgroundColor: const Color(0xfff19b3b),
-      body: Center(child: Image.asset('assets/foreground.png')),
-    );
+        backgroundColor: const Color(0xfff19b3b),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.headphones_rounded,
+                color: Colors.black,
+                size: 100.0,
+              ),
+              Text(
+                'ListenBox',
+                style: TextStyle(
+                    fontSize: 25.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        )
+        // Center(
+        //     child: Image.asset(
+        //   'assets/foreground.png',
+        //   fit: BoxFit.contain,
+        //   // height: 150,
+        //   // width: 150,
+        // )),
+        );
   }
 }
 
