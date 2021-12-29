@@ -11,7 +11,6 @@ class SongWidget extends StatefulWidget {
 }
 
 class _SongWidgetState extends State<SongWidget> {
-  Color? color;
   @override
   void initState() {
     super.initState();
