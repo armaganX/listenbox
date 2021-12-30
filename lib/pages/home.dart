@@ -222,6 +222,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                               setState(() {
                                 _isListening = false;
+                                controllerRipple.reset();
+                                buttonController.reset();
                                 music = result.metadata!.music.first;
                               });
                             } on Exception catch (e) {
