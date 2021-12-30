@@ -18,6 +18,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController buttonController;
   late Animation<double> bubbleAnimation;
   late AnimationController bubbleController;
+  late AnimationController controllerRipple;
+  late Animation animationRipple;
+  Color? colorRipple;
   // list of bubble widgets shown on screen
   final List<Widget> bubbleWidgets = [];
   double _micVolume = 0.0;
@@ -29,6 +32,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Stream<double> volume;
   @override
   void initState() {
+    controllerRipple =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+    animationRipple = ColorTween(begin: Colors.black, end: Colors.red)
+        .animate(controllerRipple);
+
+    animationRipple.addListener(() {
+      setState(() {
+        colorRipple = animationRipple.value;
+      });
+    });
+
     buttonController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 7),
@@ -66,6 +80,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void dispose() {
     buttonController.dispose();
     bubbleController.dispose();
+    controllerRipple.dispose();
     super.dispose();
   }
 
@@ -93,8 +108,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     child: Align(
                       alignment: Alignment.center,
                       child: RipplesAnimation(
-                        color: Colors.black,
+                        color:
+                            colorRipple != null ? colorRipple! : Colors.black,
                         size: _isListening ? _micVolume : 0.0,
+                        // size: 150,
                         onPressed: () {
                           setState(() {
                             music = null;
@@ -138,6 +155,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             try {
                               ACRCloudSession? session;
                               if (!_isListening) {
+                                controllerRipple.repeat();
                                 buttonController.repeat();
                                 session = ACRCloud.startSession();
                                 setState(() {
@@ -169,6 +187,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ));
+                                controllerRipple.reset();
                                 buttonController.reset();
                                 return;
                               }
@@ -178,6 +197,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               if (result == null) {
                                 return;
                               } else if (result.metadata == null) {
+                                controllerRipple.reset();
                                 buttonController.reset();
                                 setState(() {
                                   _isListening = false;
