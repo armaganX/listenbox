@@ -10,25 +10,10 @@ class SongWidget extends StatefulWidget {
   _SongWidgetState createState() => _SongWidgetState();
 }
 
-class _SongWidgetState extends State<SongWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<Color> _colorAnim;
+class _SongWidgetState extends State<SongWidget> {
   Color? color;
   @override
   void initState() {
-    controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorAnim = ColorTween(begin: Colors.black, end: Colors.white)
-        .animate(controller) as Animation<Color>;
-
-    _colorAnim.addListener(() {
-      setState(() {
-        color = _colorAnim.value;
-      });
-    });
-
-    controller.forward();
     super.initState();
   }
 
@@ -41,21 +26,23 @@ class _SongWidgetState extends State<SongWidget>
           child: Text(
             widget.music.title,
             style: TextStyle(
-                fontSize: 25.0, color: color, fontWeight: FontWeight.bold),
+                fontSize: 25.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold),
           ),
         ),
         SlideFadeTransition(
           delayStart: Duration(milliseconds: 900),
           child: Text(
             widget.music.album.name,
-            style: TextStyle(fontSize: 20.0, color: color),
+            style: TextStyle(fontSize: 20.0, color: Colors.black),
           ),
         ),
         SlideFadeTransition(
           delayStart: Duration(milliseconds: 1350),
           child: Text(
             widget.music.artists.first.name,
-            style: TextStyle(fontSize: 20.0, color: color),
+            style: TextStyle(fontSize: 20.0, color: Colors.black),
           ),
         ),
       ],
