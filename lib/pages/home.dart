@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   music = null;
                                   session?.volumeStream.listen((event) {
                                     setState(() {
-                                      _micVolume = (100 * event);
+                                      _micVolume = (150 * event);
                                     });
                                   });
                                 });
