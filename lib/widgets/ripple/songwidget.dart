@@ -18,33 +18,40 @@ class _SongWidgetState extends State<SongWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SlideFadeTransition(
-          delayStart: const Duration(milliseconds: 450),
-          child: Text(
-            widget.music.title,
-            style: TextStyle(
-                fontSize: 25.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
-          ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        padding: EdgeInsets.all(5),
+        child: Column(
+          children: [
+            SlideFadeTransition(
+              delayStart: const Duration(milliseconds: 450),
+              child: Text(
+                widget.music.title,
+                style: TextStyle(
+                    fontSize: 25.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            SlideFadeTransition(
+              delayStart: Duration(milliseconds: 900),
+              child: Text(
+                widget.music.album.name,
+                style: TextStyle(fontSize: 20.0, color: Colors.black),
+              ),
+            ),
+            SlideFadeTransition(
+              delayStart: Duration(milliseconds: 1350),
+              child: Text(
+                widget.music.artists.first.name,
+                style: TextStyle(fontSize: 20.0, color: Colors.black),
+              ),
+            ),
+          ],
         ),
-        SlideFadeTransition(
-          delayStart: Duration(milliseconds: 900),
-          child: Text(
-            widget.music.album.name,
-            style: TextStyle(fontSize: 20.0, color: Colors.black),
-          ),
-        ),
-        SlideFadeTransition(
-          delayStart: Duration(milliseconds: 1350),
-          child: Text(
-            widget.music.artists.first.name,
-            style: TextStyle(fontSize: 20.0, color: Colors.black),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

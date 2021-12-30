@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_acrcloud/flutter_acrcloud.dart';
 import 'package:listenbox/utils/constants.dart';
+import 'package:listenbox/widgets/SlideFadeTransition.dart';
 import 'package:listenbox/widgets/ripple/connection_status_bar.dart';
 import 'package:listenbox/widgets/ripple/rippleanimation.dart';
 import 'package:listenbox/widgets/ripple/songwidget.dart';
@@ -233,7 +234,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   _isListening
                       ? Positioned(
-                          bottom: MediaQuery.of(context).size.height / 8,
+                          bottom: MediaQuery.of(context).size.height / 10,
                           child: const Align(
                             alignment: Alignment.bottomCenter,
                             child: Text(
@@ -247,7 +248,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         )
                       : Container(),
                   Positioned(
-                    bottom: MediaQuery.of(context).size.height / 8,
+                    top: MediaQuery.of(context).size.height / 8 * 5,
+                    bottom: 5,
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: music != null
