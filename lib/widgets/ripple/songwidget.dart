@@ -19,7 +19,7 @@ class _SongWidgetState extends State<SongWidget>
   void initState() {
     controller =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorAnim = ColorTween(begin: Colors.red, end: Colors.white)
+    _colorAnim = ColorTween(begin: Colors.black, end: Colors.white)
         .animate(controller) as Animation<Color>;
 
     _colorAnim.addListener(() {
