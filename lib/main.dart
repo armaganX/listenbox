@@ -137,24 +137,27 @@ class _SplashState extends State<Splash> {
         ),
         Align(
           alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.headphones_rounded,
-                color: Colors.black,
-                size: 100.0,
-              ),
-              Text(
-                'ListenBox',
-                style: TextStyle(
-                    fontSize: 25.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              )
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.headphones_rounded,
+                  color: Colors.black,
+                  size: 105.0,
+                ),
+                Text(
+                  'ListenBox',
+                  style: TextStyle(
+                      fontSize: 25.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
           ),
         ),
       ]),
