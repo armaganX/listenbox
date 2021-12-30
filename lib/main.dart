@@ -118,19 +118,22 @@ class _SplashState extends State<Splash> {
       body: Stack(alignment: Alignment.center, children: [
         Align(
           alignment: Alignment.center,
-          child: AnimatedContainer(
-            height: _startSize,
-            width: _startSize,
-            duration: Duration(milliseconds: 150),
-            curve: Curves.linear,
-            child: RipplesAnimation(
-              color: Colors.orange[800] as Color,
-              size: 100,
-              child: Container(
-                color: Colors.transparent,
-                alignment: Alignment.center,
-                height: 120,
-                width: 120,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: AnimatedContainer(
+              height: _startSize,
+              width: _startSize,
+              duration: Duration(milliseconds: 150),
+              curve: Curves.linear,
+              child: RipplesAnimation(
+                color: Colors.orange[800] as Color,
+                size: 100,
+                child: Container(
+                  color: Colors.transparent,
+                  alignment: Alignment.center,
+                  height: 120,
+                  width: 120,
+                ),
               ),
             ),
           ),
@@ -138,7 +141,7 @@ class _SplashState extends State<Splash> {
         Align(
           alignment: Alignment.center,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
+            padding: const EdgeInsets.only(bottom: 20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,

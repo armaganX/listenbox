@@ -10,7 +10,28 @@ class SongWidget extends StatefulWidget {
   _SongWidgetState createState() => _SongWidgetState();
 }
 
-class _SongWidgetState extends State<SongWidget> {
+class _SongWidgetState extends State<SongWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation<Color> _colorAnim;
+  Color? color;
+  @override
+  void initState() {
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+    _colorAnim = ColorTween(begin: Colors.red, end: Colors.white)
+        .animate(controller) as Animation<Color>;
+
+    _colorAnim.addListener(() {
+      setState(() {
+        color = _colorAnim.value;
+      });
+    });
+
+    controller.forward();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,24 +40,22 @@ class _SongWidgetState extends State<SongWidget> {
           delayStart: const Duration(milliseconds: 450),
           child: Text(
             widget.music.title,
-            style: const TextStyle(
-                fontSize: 25.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 25.0, color: color, fontWeight: FontWeight.bold),
           ),
         ),
         SlideFadeTransition(
-          delayStart: const Duration(milliseconds: 900),
+          delayStart: Duration(milliseconds: 900),
           child: Text(
             widget.music.album.name,
-            style: const TextStyle(fontSize: 20.0, color: Colors.black),
+            style: TextStyle(fontSize: 20.0, color: color),
           ),
         ),
         SlideFadeTransition(
-          delayStart: const Duration(milliseconds: 1350),
+          delayStart: Duration(milliseconds: 1350),
           child: Text(
             widget.music.artists.first.name,
-            style: const TextStyle(fontSize: 20.0, color: Colors.black),
+            style: TextStyle(fontSize: 20.0, color: color),
           ),
         ),
       ],
