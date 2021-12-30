@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:listenbox/pages/home.dart';
 import 'package:listenbox/widgets/ripple/connection_status_bar.dart';
+import 'package:listenbox/widgets/ripple/rippleanimation.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,18 +87,60 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Splash extends StatelessWidget {
+class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
+
+  @override
+  State<Splash> createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> {
+  double _startSize = 0.0;
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      Timer.periodic(Duration(milliseconds: 150), (timer) {
+        setState(() {
+          _startSize += 25;
+        });
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     // bool lightMode =
     //     MediaQuery.of(context).platformBrightness == Brightness.light;
     return Scaffold(
-        backgroundColor: const Color(0xfff19b3b),
-        body: Center(
+      backgroundColor: const Color(0xfff19b3b),
+      body: Stack(alignment: Alignment.center, children: [
+        Align(
+          alignment: Alignment.center,
+          child: AnimatedContainer(
+            height: _startSize,
+            width: _startSize,
+            duration: Duration(milliseconds: 150),
+            curve: Curves.linear,
+            child: RipplesAnimation(
+              color: Colors.orange[800] as Color,
+              size: 100,
+              child: Container(
+                color: Colors.transparent,
+                alignment: Alignment.center,
+                height: 120,
+                width: 120,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(
                 Icons.headphones_rounded,
@@ -111,15 +156,9 @@ class Splash extends StatelessWidget {
               )
             ],
           ),
-        )
-        // Center(
-        //     child: Image.asset(
-        //   'assets/foreground.png',
-        //   fit: BoxFit.contain,
-        //   // height: 150,
-        //   // width: 150,
-        // )),
-        );
+        ),
+      ]),
+    );
   }
 }
 
