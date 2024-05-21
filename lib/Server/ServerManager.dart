@@ -12,7 +12,6 @@ import 'package:listenbox/utils/ExceptionHelpers.dart';
 
 class ServerManager<T extends BaseModel> {
   String baseURL = "https://api.deezer.com";
-  // ServerManager() {}
 
   final headers = {
     "content-type": "application/json",
