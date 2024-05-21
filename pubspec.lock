@@ -113,10 +113,11 @@ packages:
   flutter_acrcloud:
     dependency: "direct main"
     description:
-      name: flutter_acrcloud
-      sha256: decbf1035958587d14ca58ffc1b922624b5cf6ccf894dbf840772d290687fbf2
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "862d8b4332830056bbacb9159f05a93f834c086d"
+      url: "https://github.com/armaganX/flutter_acrcloud.git"
+    source: git
     version: "0.2.1"
   flutter_lints:
     dependency: "direct dev"
