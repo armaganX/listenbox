@@ -1,9 +1,14 @@
+// ignore_for_file: avoid_shadowing_type_parameters
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+
+import 'package:http/http.dart' as http;
+
 import 'package:listenbox/Server/DataResponse.dart';
 import 'package:listenbox/models/BaseModel.dart';
-import 'package:http/http.dart' as http;
+import 'package:listenbox/utils/ExceptionHelpers.dart';
 
 class ServerManager<T extends BaseModel> {
   String baseURL = "https://api.deezer.com";
@@ -20,7 +25,7 @@ class ServerManager<T extends BaseModel> {
     // "MaxRequestBodySize": "Always",
     // "Keep-Alive": "timeout=5, max=1000",
   };
-
+  String? jsonBody;
   Future<DataResponse<T>> getApiRequestDataResponse<T>({
     required String endPoint,
     required T Function(Map<String, dynamic> json) fromJson,
@@ -40,14 +45,11 @@ class ServerManager<T extends BaseModel> {
           : params,
     );
     if (kDebugMode) {
-      print('Api URL: ' + uri.toString());
+      print('Api URL: $uri');
+      print('Query String: ${json.encode(headers)}');
     }
 
-    if (kDebugMode) {
-      print('Query String: ' + json.encode(headers));
-    }
     try {
-      String? jsonBody;
       if (body != null) {
         jsonBody = json.encode(body);
       } else {
@@ -58,19 +60,12 @@ class ServerManager<T extends BaseModel> {
         headers: headers,
       );
       if (response.statusCode != 200) {
-        // throw getInternalException(response.statusCode);
+        throw getInternalException(response.statusCode);
       }
 
       final data = DataResponse<T>.fromJSON(response, fromJson);
-
       return data;
     } on Exception catch (e) {
-      // Constants.hasLoadingButton.value = false;
-      // await BasicHelpers().reportCrash(e);
-      // if (isInternalException) {
-      //   isInternalException = false;
-      //   return Future.error(Exception(e.toString()));
-      // }
       var ex = Exception('Hata oluştu. Tekrar deneyiniz.');
       return Future.error(ex);
     }

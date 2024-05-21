@@ -1,4 +1,5 @@
-// ignore: file_names
+// ignore_for_file: file_names
+
 import 'package:listenbox/models/BaseModel.dart';
 
 class DeezerSongModel implements BaseModel {
@@ -89,6 +90,7 @@ class DeezerSongModel implements BaseModel {
     type = json['type'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;

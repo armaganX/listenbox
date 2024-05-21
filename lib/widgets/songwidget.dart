@@ -22,8 +22,6 @@ class SongWidgetState extends State<SongWidget> {
   void initState() {
     super.initState();
     String id = widget.music.id;
-    print('id:' + id);
-
     getData(id);
   }
 

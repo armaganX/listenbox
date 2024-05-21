@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -164,9 +166,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     setState(() {
                                       _micVolume = (150 * event);
                                     });
-                                  }).onData((data) {
-                                    print(data.toString());
-                                  });
+                                  }).onData((data) {});
                                 });
                               } else {
                                 setState(() {

@@ -38,6 +38,7 @@ dependencies:
   flutter_acrcloud: ^0.2.1
   connectivity_plus: ^5.0.2
   http: ^1.2.1
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
