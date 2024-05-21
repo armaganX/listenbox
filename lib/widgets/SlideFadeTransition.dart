@@ -28,7 +28,8 @@ class SlideFadeTransition extends StatefulWidget {
   ///The total duration in which the animation completes. Defaults to 800 milliseconds
   final Duration animationDuration;
 
-  SlideFadeTransition({
+  const SlideFadeTransition({
+    super.key,
     required this.child,
     this.offset = 0.2,
     this.curve = Curves.easeIn,
@@ -37,10 +38,10 @@ class SlideFadeTransition extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 800),
   });
   @override
-  _SlideFadeTransitionState createState() => _SlideFadeTransitionState();
+  SlideFadeTransitionState createState() => SlideFadeTransitionState();
 }
 
-class _SlideFadeTransitionState extends State<SlideFadeTransition>
+class SlideFadeTransitionState extends State<SlideFadeTransition>
     with SingleTickerProviderStateMixin {
   late Animation<Offset> _animationSlide;
 
@@ -58,16 +59,16 @@ class _SlideFadeTransitionState extends State<SlideFadeTransition>
 
     //configure the animation controller as per the direction
     if (widget.direction == Direction.vertical) {
-      _animationSlide =
-          Tween<Offset>(begin: Offset(0, widget.offset), end: Offset(0, 0))
-              .animate(CurvedAnimation(
+      _animationSlide = Tween<Offset>(
+              begin: Offset(0, widget.offset), end: const Offset(0, 0))
+          .animate(CurvedAnimation(
         curve: widget.curve,
         parent: _animationController,
       ));
     } else {
-      _animationSlide =
-          Tween<Offset>(begin: Offset(widget.offset, 0), end: Offset(0, 0))
-              .animate(CurvedAnimation(
+      _animationSlide = Tween<Offset>(
+              begin: Offset(widget.offset, 0), end: const Offset(0, 0))
+          .animate(CurvedAnimation(
         curve: widget.curve,
         parent: _animationController,
       ));

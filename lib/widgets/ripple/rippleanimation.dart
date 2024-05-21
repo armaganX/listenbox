@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:listenbox/widgets/curvewave.dart';
 import 'package:listenbox/widgets/ripple/circlepainter.dart';
-import 'package:listenbox/widgets/ripple/curvewave.dart';
 
-class RipplesAnimation extends StatefulWidget {
-  const RipplesAnimation(
-      {Key? key,
-      this.size = 80.0,
-      this.color = Colors.red,
-      this.onPressed,
-      required this.child})
-      : super(key: key);
+class RippleAnimation extends StatefulWidget {
   final double size;
   final Color color;
   final Widget child;
   final VoidCallback? onPressed;
+  const RippleAnimation(
+      {super.key,
+      this.size = 80.0,
+      this.color = Colors.red,
+      this.onPressed,
+      required this.child});
+
   @override
-  _RipplesAnimationState createState() => _RipplesAnimationState();
+  State<RippleAnimation> createState() => RippleAnimationState();
 }
 
-class _RipplesAnimationState extends State<RipplesAnimation>
+class RippleAnimationState extends State<RippleAnimation>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   @override

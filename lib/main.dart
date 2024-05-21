@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:listenbox/pages/home.dart';
-import 'package:listenbox/widgets/ripple/connection_status_bar.dart';
+
+import 'package:listenbox/pages/HomePage.dart';
+// import 'package:listenbox/widgets/connection_status_bar.dart';
 import 'package:listenbox/widgets/ripple/rippleanimation.dart';
 
 void main() {
@@ -14,7 +15,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -47,39 +48,39 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
               ),
               // home: const HomePage(),
-              home: Stack(fit: StackFit.expand, children: [
-                const HomePage(),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: ConnectionStatusBar(
-                    height: 45,
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Icon(
-                          Icons.wifi_off_rounded,
-                          color: Colors.white,
-                          size: 25,
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          'Please check your internet connection',
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              color: Colors.white,
-                              fontSize: 14),
-                        ),
-                      ],
-                    ),
-                    color: Colors.black,
-                  ),
-                )
+              home: const Stack(fit: StackFit.expand, children: [
+                HomePage(),
+                // Align(
+                //   alignment: Alignment.topCenter,
+                //   child: ConnectionStatusBar(
+                //     height: 25,
+                //     title: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       children: [
+                //         SizedBox(
+                //           width: 15,
+                //         ),
+                //         Icon(
+                //           Icons.wifi_off_rounded,
+                //           color: Colors.white,
+                //           size: 25,
+                //         ),
+                //         SizedBox(
+                //           width: 15,
+                //         ),
+                //         Text(
+                //           'Please check your internet connection',
+                //           style: TextStyle(
+                //               decoration: TextDecoration.none,
+                //               color: Colors.white,
+                //               fontSize: 14),
+                //         ),
+                //       ],
+                //     ),
+                //     color: Colors.black,
+                //   ),
+                // )
               ]),
             );
           }
@@ -88,7 +89,7 @@ class MyApp extends StatelessWidget {
 }
 
 class Splash extends StatefulWidget {
-  const Splash({Key? key}) : super(key: key);
+  const Splash({super.key});
 
   @override
   State<Splash> createState() => _SplashState();
@@ -98,8 +99,8 @@ class _SplashState extends State<Splash> {
   double _startSize = 0.0;
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      Timer.periodic(Duration(milliseconds: 150), (timer) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Timer.periodic(const Duration(milliseconds: 150), (timer) {
         setState(() {
           _startSize += 25;
         });
@@ -123,9 +124,9 @@ class _SplashState extends State<Splash> {
             child: AnimatedContainer(
               height: _startSize,
               width: _startSize,
-              duration: Duration(milliseconds: 150),
+              duration: const Duration(milliseconds: 150),
               curve: Curves.linear,
-              child: RipplesAnimation(
+              child: RippleAnimation(
                 color: Colors.orange[800] as Color,
                 size: 100,
                 child: Container(
@@ -138,10 +139,10 @@ class _SplashState extends State<Splash> {
             ),
           ),
         ),
-        Align(
+        const Align(
           alignment: Alignment.center,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
+            padding: EdgeInsets.only(bottom: 20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
