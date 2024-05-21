@@ -54,7 +54,7 @@ class SongWidgetState extends State<SongWidget> {
         child: Row(
           children: [
             SlideFadeTransition(
-              delayStart: const Duration(milliseconds: 300),
+              delayStart: const Duration(milliseconds: 900),
               child: Container(
                 height: 80,
                 width: 80,
@@ -79,7 +79,7 @@ class SongWidgetState extends State<SongWidget> {
                 SlideFadeTransition(
                   delayStart: const Duration(milliseconds: 450),
                   child: Text(
-                    'Song:${widget.music.title}',
+                    'Song: ${widget.music.title}',
                     textAlign: TextAlign.left,
                     style: const TextStyle(
                         fontSize: 15.0,
@@ -91,16 +91,22 @@ class SongWidgetState extends State<SongWidget> {
                   delayStart: const Duration(milliseconds: 550),
                   child: Text(
                     textAlign: TextAlign.left,
-                    'Album:${widget.music.album.name}',
-                    style: const TextStyle(fontSize: 13.0, color: Colors.black),
+                    'Album: ${widget.music.album.name}',
+                    style: const TextStyle(
+                        fontSize: 13.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 SlideFadeTransition(
                   delayStart: const Duration(milliseconds: 650),
                   child: Text(
                     textAlign: TextAlign.left,
-                    'Artist:${widget.music.artists.first.name}',
-                    style: const TextStyle(fontSize: 13.0, color: Colors.black),
+                    'Artist: ${widget.music.artists.first.name}',
+                    style: const TextStyle(
+                        fontSize: 13.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
