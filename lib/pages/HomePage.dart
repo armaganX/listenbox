@@ -166,7 +166,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     setState(() {
                                       _micVolume = (150 * event);
                                     });
-                                  }).onData((data) {});
+                                  });
                                 });
                               } else {
                                 setState(() {
@@ -260,15 +260,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           ),
                         )
                       : const SizedBox.shrink(),
-                  Positioned(
-                    top: MediaQuery.of(context).size.height / 8 * 5,
-                    bottom: 5,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: music != null
-                          ? SongWidget(music: music!)
-                          : Container(),
-                    ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: music != null
+                        ? SongWidget(music: music!)
+                        : const SizedBox.shrink(),
                   ),
                   _isListening
                       ? Positioned(
@@ -282,7 +278,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     fontWeight: FontWeight.bold)),
                           ),
                         )
-                      : Container(),
+                      : const SizedBox.shrink(),
                 ],
           ),
         ),

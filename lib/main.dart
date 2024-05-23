@@ -142,7 +142,7 @@ class _SplashState extends State<Splash> {
         const Align(
           alignment: Alignment.center,
           child: Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
+            padding: EdgeInsets.only(bottom: 5.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
